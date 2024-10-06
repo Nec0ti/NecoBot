@@ -3,10 +3,19 @@ from discord import app_commands
 import time
 import random
 import requests
+from flask import Flask
+import threading
+import os
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
 
 @tree.command(name="ping", description="Botun gecikme süresini ölçer")
 async def ping(interaction: discord.Interaction):
@@ -43,12 +52,25 @@ async def joke(interaction: discord.Interaction):
     else:
         await interaction.response.send_message("Meme çekilemedi. Lütfen tekrar deneyin.")
 
-
 @client.event
 async def on_ready():
     await tree.sync()
     print(f"{client.user} olarak giriş yapıldı!")
 
+def run_discord_bot():
+    client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4')
 
-# Botunuzu çalıştırın
-client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4')
+def run_flask():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
+if __name__ == '__main__':
+    t1 = threading.Thread(target=run_discord_bot)
+    t2 = threading.Thread(target=run_flask)
+    
+    t1.start()
+    t2.start()
+    
+    t1.join()
+    t2.join()
+
+# client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4')
