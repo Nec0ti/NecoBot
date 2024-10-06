@@ -33,7 +33,7 @@ async def roll(interaction: discord.Interaction):
     number = random.randint(1, 100)
     await interaction.response.send_message(f"Attığın sayı: {number}")
 
-@tree.command(name="joke", description="Rastgele bir meme gönderir.")
+@tree.command(name="joke", description="Rastgele bir meme fotosu gönderir.")
 async def joke(interaction: discord.Interaction):
     response = requests.get("https://meme-api.com/gimme")
     if response.status_code == 200:
