@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 import time
 import random
+import requests
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -32,14 +33,16 @@ async def roll(interaction: discord.Interaction):
     number = random.randint(1, 100)
     await interaction.response.send_message(f"Attığın sayı: {number}")
 
-@tree.command(name="joke", description="Rastgele bir şaka gönderir(bombok oluyo ama).")
+@tree.command(name="joke", description="Rastgele bir meme gönderir.")
 async def joke(interaction: discord.Interaction):
-    jokes = [
-        "Neden bilgisayarlar soğuk olur? Çünkü çok fan var!",
-        "Kediler neden bilgisayarı sevmez? Çünkü fareyi kovalarlar!",
-        "Süpermen neden asansörü kullanmaz? Çünkü hep yukarıdan gelir!"
-    ]
-    await interaction.response.send_message(random.choice(jokes))
+    response = requests.get("https://meme-api.com/gimme")
+    if response.status_code == 200:
+        data = response.json()
+        meme_url = data['url']
+        await interaction.response.send_message(meme_url)
+    else:
+        await interaction.response.send_message("Meme çekilemedi. Lütfen tekrar deneyin.")
+
 
 @client.event
 async def on_ready():
