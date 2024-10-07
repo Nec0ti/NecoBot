@@ -7,6 +7,19 @@ from flask import Flask
 import threading
 import os
 
+# Keep-alive işlevi, her 5 dakikada bir kendi Flask sunucunuza istek gönderir
+def keep_alive():
+    while True:
+        try:
+            # URL'yi kendi Render host URL'inizle değiştirin
+            requests.get("http://127.0.0.1:10000")
+            print("Keep-alive ping sent.")
+        except Exception as e:
+            print(f"Keep-alive ping failed: {e}")
+        time.sleep(100)
+
+t3 = threading.Thread(target=keep_alive)
+t3.start()
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
