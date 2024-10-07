@@ -4,11 +4,10 @@ from discord import app_commands
 import time
 import random
 import requests
-from flask import Flask
-import threading
 from flask import Flask, render_template_string
 from datetime import datetime, timedelta
 import json
+import threading
 
 app = Flask(__name__)
 
