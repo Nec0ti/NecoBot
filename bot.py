@@ -12,7 +12,7 @@ def keep_alive():
     time.sleep(10)  # Flask sunucusunun tamamen başlatılması için bekleyelim
     while True:
         try:
-            response = requests.get("http://10.217.60.5:10000/")
+            response = requests.get("http://127.0.0.1:10000")
             if response.status_code == 200:
                 print("Keep-alive ping sent successfully.")
             else:
