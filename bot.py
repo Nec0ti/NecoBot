@@ -8,6 +8,7 @@ from flask import Flask, render_template_string
 from datetime import datetime, timedelta
 import json
 import threading
+import aiohttp
 
 app = Flask(__name__)
 
@@ -160,6 +161,8 @@ async def joke(interaction: discord.Interaction):
                     await interaction.response.send_message(meme_url)
                 else:
                     await interaction.response.send_message("Meme çekilemedi. Lütfen tekrar deneyin.")
+    except aiohttp.ClientError as e:  # Özel hata türü
+        await interaction.response.send_message(f"Bir ağ hatası oluştu: {str(e)}", ephemeral=True)
     except Exception as e:
         await interaction.response.send_message(f"Bir hata oluştu: {str(e)}", ephemeral=True)
     finally:
