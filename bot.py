@@ -116,12 +116,15 @@ def update_command_usage(command_name):
 
 @tree.command(name="ping", description="Botun gecikme süresini ölçer")
 async def ping(interaction: discord.Interaction):
-    start_time = time.time()
-    await interaction.response.send_message("Ping ölçülüyor...")
-    end_time = time.time()
-    latency = round((end_time - start_time) * 1000)
-    await interaction.edit_original_response(content=f"Pong! Gecikme: {latency}ms")
-    update_command_usage("ping")
+    try:
+        start_time = time.time()
+        await interaction.response.send_message("Ping ölçülüyor...")
+        end_time = time.time()
+        latency = round((end_time - start_time) * 1000)
+        await interaction.edit_original_response(content=f"Pong! Gecikme: {latency}ms")
+        update_command_usage("ping")
+    except Exception as e:
+        await interaction.response.send_message(f"Bir hata oluştu: {str(e)}", ephemeral=True)
 
 @tree.command(name="hello", description="Botun selam vermesini sağlar.")
 async def hello(interaction: discord.Interaction):
@@ -146,14 +149,19 @@ async def roll(interaction: discord.Interaction):
 
 @tree.command(name="joke", description="Rastgele bir meme fotosu gönderir.")
 async def joke(interaction: discord.Interaction):
-    response = requests.get("https://meme-api.com/gimme")
-    if response.status_code == 200:
-        data = response.json()
-        meme_url = data['url']
-        await interaction.response.send_message(meme_url)
-    else:
-        await interaction.response.send_message("Meme çekilemedi. Lütfen tekrar deneyin.")
-    update_command_usage("joke")
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://meme-api.com/gimme") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    meme_url = data['url']
+                    await interaction.response.send_message(meme_url)
+                else:
+                    await interaction.response.send_message("Meme çekilemedi. Lütfen tekrar deneyin.")
+    except Exception as e:
+        await interaction.response.send_message(f"Bir hata oluştu: {str(e)}", ephemeral=True)
+    finally:
+        update_command_usage("joke")
 
 @client.event
 async def on_ready():
