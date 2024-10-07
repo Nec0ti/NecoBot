@@ -111,6 +111,9 @@ def update_command_usage(command_name):
     for cmd in command_usage.values():
         cmd["times"] = [time for time in cmd["times"] if time > one_hour_ago]
 
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
+tree = app_commands.CommandTree(client)
 
 
 @tree.command(name="ping", description="Botun gecikme süresini ölçer")
