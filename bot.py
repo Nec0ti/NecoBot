@@ -1,3 +1,4 @@
+import os
 import discord
 from discord import app_commands
 import time
@@ -5,25 +6,7 @@ import random
 import requests
 from flask import Flask
 import threading
-import os
-import time
 
-def keep_alive():
-    time.sleep(10)  # Flask sunucusunun tamamen başlatılması için bekleyelim
-    while True:
-        try:
-            response = requests.get("http://127.0.0.1:10000")
-            if response.status_code == 200:
-                print("Keep-alive ping sent successfully.")
-            else:
-                print(f"Keep-alive ping failed with status: {response.status_code}")
-        except Exception as e:
-            print(f"Keep-alive ping failed: {e}")
-        time.sleep(60)  # 60 saniye (1 dakika) bekler
-
-# Keep-alive thread'ini başlatıyoruz
-t3 = threading.Thread(target=keep_alive)
-t3.start()
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
@@ -75,19 +58,19 @@ async def on_ready():
     print(f"{client.user} olarak giriş yapıldı!")
 
 def run_discord_bot():
-    client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4')
+    client.run(os.getenv('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4'))
 
 def run_flask():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 
 if __name__ == '__main__':
-    t1 = threading.Thread(target=run_discord_bot)
-    t2 = threading.Thread(target=run_flask)
+    discord_thread = threading.Thread(target=run_discord_bot)
+    flask_thread = threading.Thread(target=run_flask)
     
-    t1.start()
-    t2.start()
+    discord_thread.start()
+    flask_thread.start()
     
-    t1.join()
-    t2.join()
+    discord_thread.join()
+    flask_thread.join()
 
 # client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4')
