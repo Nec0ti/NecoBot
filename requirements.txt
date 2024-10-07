@@ -1,5 +1,5 @@
-Flask
-discord.py
-requests
-gunicorn
-chart.js
+discord.py==2.3.2
+Flask==3.0.0
+requests==2.31.0
+gunicorn==21.2.0
+chart.js==3.7.0
