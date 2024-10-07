@@ -10,10 +10,6 @@ from flask import Flask, render_template_string
 from datetime import datetime, timedelta
 import json
 
-intents = discord.Intents.default()
-client = discord.Client(intents=intents)
-tree = app_commands.CommandTree(client)
-
 app = Flask(__name__)
 
 # Bu değişkenler normalde veritabanında saklanır, 
@@ -40,7 +36,7 @@ def home():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Discord Bot Dashboard</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
         <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f0f0; }
             .container { max-width: 800px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -100,7 +96,8 @@ def home():
     </body>
     </html>
     ''', command_data=command_data, last_command=last_command, total_commands_last_hour=total_commands_last_hour)
-    
+
+# Bu fonksiyon, bir komut kullanıldığında çağrılmalı
 def update_command_usage(command_name):
     global command_usage, last_command, total_commands_last_hour
     now = datetime.now()
@@ -114,7 +111,8 @@ def update_command_usage(command_name):
     one_hour_ago = now - timedelta(hours=1)
     for cmd in command_usage.values():
         cmd["times"] = [time for time in cmd["times"] if time > one_hour_ago]
-        
+
+
 
 @tree.command(name="ping", description="Botun gecikme süresini ölçer")
 async def ping(interaction: discord.Interaction):
