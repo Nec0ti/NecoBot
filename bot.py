@@ -58,7 +58,7 @@ async def on_ready():
     print(f"{client.user} olarak giriş yapıldı!")
 
 def run_discord_bot():
-    client.run(os.getenv('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GmVzAL._UWwSNOtpvPpbEVihV7TdGnm6OnXinrsv0wQT4'))
+    client.run(os.getenv('TOKEN'))
 
 def run_flask():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
