@@ -191,5 +191,3 @@ if __name__ == '__main__':
     
     discord_thread.join()
     flask_thread.join()
-
-# client.run('MTI5MjQ4NzMxNDIxOTYwMTkyMA.GXg0Fn.WiS_FJKqTv3eBvn-DNhnukg1jCD3ygr1brxRMM')
